@@ -14,7 +14,7 @@ import pick from 'lodash/pick';
 import { ConfigProvider } from 'antd';
 
 
-const configKeys = ["conjunctions", "fields", "types", "operators", "widgets", "settings", "funcs"];
+const configKeys = ["conjunctions", "fields", "types", "operators", "widgets", "settings", "funcs", "ruleActions"];
 
 const validateAndFixTree = (newTree, _oldTree, newConfig, oldConfig) => {
     let tree = validateTree(newTree, _oldTree, newConfig, oldConfig, true, true);
@@ -48,7 +48,7 @@ class Query extends PureComponent {
 
     _updateActions (props) {
       const {config, dispatch} = props;
-      this.actions = bindActionCreators({...actions.tree, ...actions.group, ...actions.rule}, config, dispatch);
+      this.actions = bindActionCreators({...actions.tree, ...actions.group, ...actions.rule, ...actions.ruleAction}, config, dispatch);
     }
 
     onPropsChanged(nextProps) {

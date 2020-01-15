@@ -47,7 +47,7 @@ export const defaultRuleProperties = (config) => {
     //used for complex operators like proximity
     operatorOptions: defaultOperatorOptions(config, operator, field),
   });
-  
+
   if (field && operator) {
     let {newValue, newValueSrc, newValueType} = getNewValueForFieldOp(config, config, current, field, operator, 'operator', false);
     current = current
@@ -55,7 +55,7 @@ export const defaultRuleProperties = (config) => {
         .set('valueSrc', newValueSrc)
         .set('valueType', newValueType);
   }
-  return current; 
+  return current;
 };
 
 //------------
@@ -67,6 +67,9 @@ export const defaultGroupProperties = (config) => new Immutable.Map({
   conjunction: defaultConjunction(config)
 });
 
+export const defaultRuleActionProperties = (config) => {
+  return new Immutable.Map({ name: null })
+}
 
 //------------
 
@@ -82,7 +85,7 @@ export const defaultRoot = (config) => {
   if (config.tree) {
     return new Immutable.Map(config.tree);
   }
-  
+
   return new Immutable.Map({
     type: 'group',
     id: uuid(),

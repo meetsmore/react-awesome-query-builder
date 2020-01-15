@@ -43,8 +43,9 @@ function _fromJS(tree) {
               // only for raw values keep JS representation
               outValue = Immutable.List.of(valueJs);
           }
-      } else
+      } else {
           outValue = Immutable.Iterable.isIndexed(value) ? value.toList() : value.toOrderedMap();
+      }
       return outValue;
   });
 };

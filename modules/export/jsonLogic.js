@@ -5,6 +5,7 @@ import {
 } from '../utils/configUtils';
 import {defaultConjunction} from '../utils/defaultUtils';
 import {completeValue} from '../utils/funcUtils';
+import uuid from '../utils/uuid';
 import {Map} from 'immutable';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
@@ -134,6 +135,7 @@ const jsonLogicFormatItem = (item, config, meta) => {
 
     if (type === 'group' && children && children.size) {
         const list = children
+            .filter((currentChild) => currentChild.get('type') !== 'ruleAction')
             .map((currentChild) => jsonLogicFormatItem(currentChild, config, meta))
             .filter((currentChild) => typeof currentChild !== 'undefined');
         if (!list.size)
@@ -144,19 +146,30 @@ const jsonLogicFormatItem = (item, config, meta) => {
             conjunction = defaultConjunction(config);
         let conj = conjunction.toLowerCase();
         const not = properties.get('not');
-        if (conj != "and" && conj != "or") {
-          meta.errors.push(`Conjunction ${conj} is not supported`);
-          return undefined;
+
+        let resultQuery
+
+        if (list.size == 1) {
+            resultQuery = list.first();
+        } else {
+            resultQuery[conj] = list.toList().toJS();
         }
 
-        let resultQuery = {};
-        if (list.size == 1)
-            resultQuery = list.first();
-        else
-            resultQuery[conj] = list.toList().toJS();
         if (not) {
           resultQuery = { "!": resultQuery };
         }
+
+        const ruleActions = children
+        .filter((currentChild) => currentChild.get('type') === 'ruleAction')
+
+        if (ruleActions.size) {
+          const ruleActionsValues = Object.values(ruleActions.map(ra => (
+            ra.get('properties').get('value')
+          )).toJS())
+
+          resultQuery = { "merge": [ resultQuery, ruleActionsValues, [] ] }
+        }
+
         return resultQuery;
     } else if (type === 'rule') {
         let operator = properties.get('operator');
