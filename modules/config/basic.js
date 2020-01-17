@@ -399,6 +399,9 @@ const operators = {
       mongoFormatOp: mongoFormatOp1.bind(null, '$ne', v => v, false),
       reversedOp: 'multiselect_equals',
   },
+  if: {
+    label: 'Action'
+  },
   proximity: {
       label: 'Proximity search',
       cardinality: 2,

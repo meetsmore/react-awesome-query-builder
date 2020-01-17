@@ -58,6 +58,8 @@ export const settings = {
   deleteLabel: null,
   addGroupLabel: "Add group",
   addRuleLabel: "Add rule",
+  addRuleActionLabel: "Add action",
+  delRuleActionLabel: null,
   delGroupLabel: null,
   notLabel: "Not",
   valueSourcesPopupTitle: "Select value source",

@@ -74,6 +74,18 @@ const removeRule = (state, path, config) => {
 const setNot = (state, path, not) =>
     state.setIn(expandTreePath(path, 'properties', 'not'), not);
 
+const addRuleAction = (state, path, id, properties) => {
+    state = state.mergeIn(expandTreePath(path, 'properties', 'ruleActions'), new Immutable.OrderedMap({
+        [id]: new Immutable.Map({properties})
+    }));
+    state = fixPathsInTree(state);
+    return state;
+}
+
+const setRuleAction = (state, path, value) => {
+    return state.setIn(expandTreePath(path, 'properties', 'value'), value)
+}
+
 /**
  * @param {Immutable.Map} state
  * @param {Immutable.List} path
@@ -122,7 +134,7 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
 
     const to = getItemByPath(state, toPath);
     const targetPath = (placement == constants.PLACEMENT_APPEND || placement == constants.PLACEMENT_PREPEND) ? toPath : toPath.pop();
-    const target = (placement == constants.PLACEMENT_APPEND || placement == constants.PLACEMENT_PREPEND) ? 
+    const target = (placement == constants.PLACEMENT_APPEND || placement == constants.PLACEMENT_PREPEND) ?
         to
         : toPath.size > 1 ? getItemByPath(state, targetPath) : null;
     const targetChildren = target ? target.get('children1') : null;
@@ -131,9 +143,9 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
         return state;
 
     const isSameParent = (source.get('id') == target.get('id'));
-    const isSourceInsideTarget = targetPath.size < sourcePath.size 
+    const isSourceInsideTarget = targetPath.size < sourcePath.size
         && deepEqual(targetPath.toArray(), sourcePath.toArray().slice(0, targetPath.size));
-    const isTargetInsideSource = targetPath.size > sourcePath.size 
+    const isTargetInsideSource = targetPath.size > sourcePath.size
         && deepEqual(sourcePath.toArray(), targetPath.toArray().slice(0, sourcePath.size));
     let sourceSubpathFromTarget = null;
     let targetSubpathFromSource = null;
@@ -158,7 +170,7 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
                 if (itemId == to.get('id') && placement == constants.PLACEMENT_BEFORE) {
                     r.set(from.get('id'), from);
                 }
-                
+
                 r.set(itemId, item);
 
                 if (itemId == to.get('id') && placement == constants.PLACEMENT_AFTER) {
@@ -343,7 +355,7 @@ const setOperatorOption = (state, path, name, value) => {
 
 
 /**
- * 
+ *
  */
 const calculateValueType = (value, valueSrc, config) => {
     let calculatedValueType = null;
@@ -389,7 +401,7 @@ export default (config) => {
     const emptyTree = defaultRoot(config);
     const emptyState = Object.assign({}, {tree: emptyTree}, emptyDrag);
     const unset = {__isInternalValueChange: undefined};
-    
+
     return (state = emptyState, action) => {
         switch (action.type) {
             case constants.SET_TREE:
@@ -415,6 +427,15 @@ export default (config) => {
 
             case constants.SET_NOT:
                 return Object.assign({}, state, {...unset}, {tree: setNot(state.tree, action.path, action.not)});
+
+            case constants.ADD_RULE_ACTION:
+                return Object.assign({}, state, {...unset}, {tree: addItem(state.tree, action.path, 'ruleAction', action.id, action.properties)});
+
+            case constants.REMOVE_RULE_ACTION:
+                return Object.assign({}, state, {...unset}, {tree: removeItem(state.tree, action.path)});
+
+            case constants.SET_RULE_ACTION:
+                return Object.assign({}, state, {...unset}, {tree: setRuleAction(state.tree, action.path, action.value)});
 
             case constants.SET_FIELD:
                 return Object.assign({}, state, {...unset}, {tree: setField(state.tree, action.path, action.field, action.config)});

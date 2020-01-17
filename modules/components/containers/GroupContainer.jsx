@@ -19,6 +19,8 @@ export default (Group) => {
       children1: PropTypes.any, //instanceOf(Immutable.OrderedMap)
       onDragStart: PropTypes.func,
       treeNodesCnt: PropTypes.number,
+      ruleActions: PropTypes.object,
+      headerLabel: PropTypes.string,
       //connected:
       dragging: PropTypes.object, //{id, x, y, w, h}
     };
@@ -102,6 +104,10 @@ export default (Group) => {
       this.props.actions.addRule(this.props.path);
     }
 
+    addRuleAction = () => {
+      this.props.actions.addRuleAction(this.props.path)
+    }
+
     render() {
       const isDraggingMe = this.props.dragging.id == this.props.id;
       const currentNesting = this.props.path.size;
@@ -139,6 +145,8 @@ export default (Group) => {
             actions={this.props.actions}
             //tree={this.props.tree}
             treeNodesCnt={this.props.treeNodesCnt}
+            ruleActions={this.props.ruleActions}
+            headerLabel={this.props.headerLabel}
           /> : null
         ,
           <Group
@@ -156,11 +164,14 @@ export default (Group) => {
             removeSelf={this.removeSelf}
             addGroup={this.addGroup}
             addRule={this.addRule}
+            addRuleAction={this.addRuleAction}
             config={this.props.config}
             children1={this.props.children1}
             actions={this.props.actions}
             //tree={this.props.tree}
             treeNodesCnt={this.props.treeNodesCnt}
+            ruleActions={this.props.ruleActions}
+            headerLabel={this.props.headerLabel}
           />
         ]}
         </div>

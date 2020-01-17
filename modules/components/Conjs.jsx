@@ -5,7 +5,6 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const ButtonGroup = Button.Group;
 
-
 class ConjsButton extends PureComponent {
   onClick = (e) => {
     const {item} = this.props;
@@ -24,10 +23,13 @@ class ConjsButton extends PureComponent {
   }
 }
 
+const GROUP_ONLY_CONJS = [
+  'Multi Action', 'If Block',
+]
 
 export class ConjsButtons extends PureComponent {
   render() {
-    const {disabled, not, setNot, conjunctionOptions, config, setConjunction} = this.props;
+    const {disabled, not, setNot, conjunctionOptions, config, setConjunction, hasRuleChildren} = this.props;
     return (
       <ButtonGroup
         key="group-conjs-buttons"
@@ -45,7 +47,11 @@ export class ConjsButtons extends PureComponent {
           <ConjsButton
             key={item.id}
             item={item}
-            disabled={disabled}
+            disabled={
+              disabled || (
+                GROUP_ONLY_CONJS.includes(item.label) && hasRuleChildren
+              )
+            }
             setConjunction={setConjunction}
           />
         ))}

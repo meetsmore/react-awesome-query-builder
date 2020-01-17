@@ -24,3 +24,7 @@ export const PLACEMENT_PREPEND = 'prepend';
 export const SET_DRAG_PROGRESS = 'SET_DRAG_PROGRESS';
 export const SET_DRAG_START = 'SET_DRAG_START';
 export const SET_DRAG_END = 'SET_DRAG_END';
+
+export const ADD_RULE_ACTION = 'ADD_RULE_ACTION';
+export const REMOVE_RULE_ACTION = 'REMOVE_RULE_ACTION';
+export const SET_RULE_ACTION = 'SET_RULE_ACTION';

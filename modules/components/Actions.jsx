@@ -15,8 +15,8 @@ const defaultPosition = 'topRight';
 
 export class Actions extends PureComponent {
   render() {
-    const {config: {settings}, addRule, addGroup, allowFurtherNesting, isRoot, removeSelf} = this.props;
-    const {immutableGroupsMode, addRuleLabel, addGroupLabel, delGroupLabel, renderSize, groupActionsPosition} = settings;
+    const {config: {settings}, addRule, addGroup, addRuleAction, allowFurtherNesting, isRoot, removeSelf, isIfStatement, isMultiActionStatement} = this.props;
+    const {immutableGroupsMode, addRuleLabel, addGroupLabel, delGroupLabel, renderSize, groupActionsPosition, enableRuleActions = true, addRuleActionLabel } = settings;
     const position = groupActionsPositionList[groupActionsPosition || defaultPosition];
 
     const addRuleBtn = !immutableGroupsMode &&
@@ -25,6 +25,7 @@ export class Actions extends PureComponent {
         icon="plus"
         className="action action--ADD-RULE"
         onClick={addRule}
+        disabled={isIfStatement || isMultiActionStatement}
       >{addRuleLabel}</Button>;
     const addGroupBtn = !immutableGroupsMode && allowFurtherNesting &&
       <Button
@@ -41,6 +42,14 @@ export class Actions extends PureComponent {
         className="action action--DELETE"
         onClick={removeSelf}
       >{delGroupLabel}</Button>;
+    const addRuleActionBtn = enableRuleActions &&
+      <Button
+        key="group-add-rule-action"
+        className="action action--ADD-RULE-ACTION"
+        icon="plus-circle-o"
+        onClick={addRuleAction}
+        disabled={isMultiActionStatement}
+      >{addRuleActionLabel}</Button>;
 
     return (
       <div className={`group--actions ${position}`}>
@@ -50,6 +59,7 @@ export class Actions extends PureComponent {
           {addRuleBtn}
           {addGroupBtn}
           {delGroupBtn}
+          {addRuleActionBtn}
         </ButtonGroup>
       </div>
     )

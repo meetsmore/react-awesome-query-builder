@@ -2,7 +2,6 @@ import mapValues from 'lodash/mapValues';
 import Immutable, { Map } from 'immutable';
 import React from 'react';
 
-
 export const SELECT_WIDTH_OFFSET_RIGHT = 48;
 const DEFAULT_FONT_SIZE = '14px';
 const DEFAULT_FONT_FAMILY = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -42,8 +41,8 @@ export const calcTextWidth = function(str, fontFamily = DEFAULT_FONT_FAMILY, fon
 export const truncateString = (str, n, useWordBoundary) => {
     if (!n || str.length <= n) { return str; }
     var subString = str.substr(0, n-1);
-    return (useWordBoundary 
-       ? subString.substr(0, subString.lastIndexOf(' ')) 
+    return (useWordBoundary
+       ? subString.substr(0, subString.lastIndexOf(' '))
        : subString) + "...";
 }
 

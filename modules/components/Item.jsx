@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Rule from './Rule';
 import Group from './Group';
+import RuleAction from './RuleAction';
 
 
 const typeMap = {
@@ -27,6 +28,18 @@ const typeMap = {
       treeNodesCnt={props.treeNodesCnt}
       onDragStart={props.onDragStart}
       children1={props.children1}
+      headerLabel={props.headerLabel}
+    />
+  ),
+  ruleAction: (props) => (
+    <RuleAction
+      {...props.properties.toObject()}
+      ruleActions={props.properties.ruleActions}
+      id={props.id}
+      path={props.path}
+      actions={props.actions}
+      config={props.config}
+      headerLabel={props.headerLabel}
     />
   )
 };
@@ -44,6 +57,7 @@ class Item extends PureComponent {
     actions: PropTypes.object.isRequired,
     treeNodesCnt: PropTypes.number,
     onDragStart: PropTypes.func,
+    headerLabel: PropTypes.string,
   };
 
   render() {

@@ -38,10 +38,24 @@ function validateItem (item, path, itemId, meta, c) {
 		return validateGroup(item, path, itemId, meta, c);
 	} else if (type === 'rule') {
 		return validateRule(item, path, itemId, meta, c);
+	} else if (type === 'ruleAction') {
+		return validateRuleAction(item, path, itemId, meta, c);
 	} else {
 		return item;
 	}
 };
+
+function validateRuleAction (item, path, itemId, meta, c) {
+	let id = item.get('id');
+
+	if (!id && itemId) {
+		id = itemId;
+		item = item.set('id', id);
+		meta.sanitized = true;
+	}
+
+	return item;
+}
 
 function validateGroup (item, path, itemId, meta, c) {
 	const {removeEmptyGroups} = c;

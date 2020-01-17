@@ -1,5 +1,5 @@
 import uuid from '../utils/uuid';
-import {defaultRuleProperties, defaultGroupProperties} from '../utils/defaultUtils';
+import {defaultRuleProperties, defaultGroupProperties, defaultRuleActionProperties} from '../utils/defaultUtils';
 import * as constants from '../constants';
 import Immutable from 'immutable';
 
@@ -69,4 +69,20 @@ export const moveItem = (config, fromPath, toPath, placement) => ({
   toPath: new Immutable.List(toPath),
   placement: placement,
   config: config,
+});
+
+export const addRuleAction = (config, path) => {
+  return {
+    type: constants.ADD_RULE_ACTION,
+    path: path,
+    id: uuid(),
+    properties: defaultRuleActionProperties(config),
+    config: config,
+  }
+}
+
+export const removeRuleAction = (config, path) => ({
+  type: constants.REMOVE_RULE_ACTION,
+  path: path,
+  config: config
 });
