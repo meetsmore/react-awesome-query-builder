@@ -150,9 +150,11 @@ const jsonLogicFormatItem = (item, config, meta) => {
         let resultQuery
 
         if (list.size == 1) {
-            resultQuery = list.first();
+          resultQuery = list.first();
+        } else if (conj === 'if') { // handle if together with rule actions
+          resultQuery = list.toList().toJS();
         } else {
-            resultQuery[conj] = list.toList().toJS();
+          resultQuery = { [conj]: list.toList().toJS() }
         }
 
         if (not) {
@@ -167,7 +169,15 @@ const jsonLogicFormatItem = (item, config, meta) => {
             ra.get('properties').get('value')
           )).toJS())
 
-          resultQuery = { "merge": [ resultQuery, ruleActionsValues, [] ] }
+          if (conj === 'if') {
+            if (!Array.isArray(resultQuery)) {
+              resultQuery = [ resultQuery ]
+            }
+
+            resultQuery = { firstMatch: [ ...resultQuery, ruleActionsValues ] }
+          } else {
+            resultQuery = { if: [ resultQuery, ruleActionsValues, [] ] }
+          }
         }
 
         return resultQuery;
